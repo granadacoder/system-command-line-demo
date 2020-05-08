@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.CommandLine;
     using System.CommandLine.Builder;
+    using System.CommandLine.Parsing;
     using Microsoft.Extensions.Logging;
     using MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.Bal.Configuration.Interfaces;
 

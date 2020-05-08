@@ -9,7 +9,7 @@
     <!-- allows one line of code to get a txt file logger #simple #notForProduction -->
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-    <PackageReference Include="System.CommandLine.Experimental" Version="0.3.0-alpha.19577.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20253.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netcoreapp2.1'">
