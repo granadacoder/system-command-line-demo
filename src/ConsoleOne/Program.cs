@@ -73,7 +73,13 @@ namespace MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne
             Console.WriteLine(string.Concat(Enumerable.Repeat(System.Environment.NewLine, 10)));
 
             ICommandCreator rcc = servProv.GetService<ICommandCreator>();
+
+            /* note , the below is a RootCommand, as the forms demo */
             RootCommand cmd = rcc.CreateRootCommand();
+
+            Console.WriteLine("cmd.GetType='{0}'", cmd.GetType().Name);
+
+            /* Note, I tried .Invoke and the below, both have the same result */
             int returnValue = await cmd.InvokeAsync(args);
             Console.WriteLine(string.Format("RootCommand.InvokeAsync='{0}'", returnValue));
 
