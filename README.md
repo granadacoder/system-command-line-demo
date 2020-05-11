@@ -1,5 +1,11 @@
 # system-command-line-demo
 
+
+Shows how to bind arguments to a POCO object.
+
+Includes two "forks", not just one.  RootCommand with 2 Commands is the technical explanation.
+
+
 Open up .sln
 
     \src\Solutions\MyCompany.MyExamples.SystemCommandLineOne.sln
@@ -10,33 +16,23 @@ Set this to startup project
 
     \src\ConsoleOne\MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.csproj
 
+
+Working examples.
+
+             example one
+             MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.exe mytypeone -a valuea -b valueb -c valuec -d valued -e valuee -f valuef -g valueg -h valueh -i valuei
+             
+            example two
+            MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.exe showdatetime --includedate false --dateformat "MM/dd/yyyy" --includetime
+            
+You can also change these in VS developer mode.
+
 Go to properties of (same) csproj, and the "Debug" tab.
 
 Application Arguments currently set to :
 
-    --mytypeone -a valuea -b valueb -c valuec -d valued -e valuee -f valuef -g valueg -h valueh -i valuei
+    mytypeone -a valuea -b valueb -c valuec -d valued -e valuee -f valuef -g valueg -h valueh -i valuei
 
----
+or 
 
-Find this method in Program.cs (and set breakpoint)
-
-    RunJustRootCommandDemo
-
----
-
-
-Points of Interest:
-
-The class:
-
-    MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.Bal.Configuration.MyTypeCommandCreator
-
-is coded exactly as the online demo, as far a I can tell.
-
-----
-
-csproj
-
-    <PackageReference Include="System.CommandLine.Experimental" Version="0.3.0-alpha.19577.1" />
-
----
+    showdatetime --includedate false --dateformat "MM/dd/yyyy" --includetime
