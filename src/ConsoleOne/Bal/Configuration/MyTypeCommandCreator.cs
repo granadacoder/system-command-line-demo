@@ -27,10 +27,8 @@
             this.logger = loggerFactory.CreateLogger<MyTypeCommandCreator>();
         }
 
-        public RootCommand CreateRootCommand()
+        public Command CreateCommand()
         {
-            RootCommand returnRootCommand = new RootCommand("my first root command");
-
             Command mytypeoneCommand = new Command("mytypeone", "mytypeone_description")
             {
                 new Option<string>("-a"),
@@ -43,8 +41,6 @@
                 new Option<string>("-h"),
                 new Option<string>("-i"),
             };
-
-            returnRootCommand.AddCommand(mytypeoneCommand);
 
             mytypeoneCommand.Handler = CommandHandler.Create<MyType>((MyType myTypeInstance) =>
             {
@@ -69,7 +65,7 @@
                 }
             });
 
-            return returnRootCommand;
+            return mytypeoneCommand;
         }
     }
 }

@@ -4,6 +4,6 @@ namespace MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.Bal.Configuration
 {
     public interface ICommandCreator
     {
-        RootCommand CreateRootCommand();
+        Command CreateCommand();
     }
 }

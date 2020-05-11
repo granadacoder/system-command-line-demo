@@ -1,7 +1,5 @@
 ﻿using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
-using System.CommandLine.Parsing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,6 +28,15 @@ namespace MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne
     {
         public static async Task<int> Main(string[] args)
         {
+            /*
+             
+             example one
+             MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.exe mytypeone -a valuea -b valueb -c valuec -d valued -e valuee -f valuef -g valueg -h valueh -i valuei
+             
+            example two
+            MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.exe mytypeone showdatetime --includedate false --dateformat "MM/dd/yyyy" --includetime
+             */
+
             /* easy concrete logger that uses a file for demos */
             Serilog.ILogger lgr = new Serilog.LoggerConfiguration()
                 .WriteTo.File("MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.log.txt", rollingInterval: Serilog.RollingInterval.Day)
@@ -54,8 +61,7 @@ namespace MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne
 
                 IServiceProvider servProv = BuildDi(configuration, lgr);
 
-                await RunJustRootCommandDemo(servProv, args);
-                await RunParserDemo(servProv, args);
+                await RunRootCommandWithMultiCommandsDemo(servProv, args);
             }
             catch (Exception ex)
             {
@@ -69,32 +75,20 @@ namespace MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne
             return 0;
         }
 
-        private static async Task<int> RunJustRootCommandDemo(IServiceProvider servProv, string[] args)
+        private static async Task<int> RunRootCommandWithMultiCommandsDemo(IServiceProvider servProv, string[] args)
         {
-            Console.WriteLine(string.Concat(Enumerable.Repeat(System.Environment.NewLine, 10)));
+            Console.WriteLine(string.Concat(Enumerable.Repeat(System.Environment.NewLine, 5)));
 
-            ICommandCreator rcc = servProv.GetService<ICommandCreator>();
+            IRootCommandBuilder ircb = servProv.GetService<IRootCommandBuilder>();
 
-            /* note , the below is a RootCommand, as the forms demo */
-            RootCommand cmd = rcc.CreateRootCommand();
+            if (null == ircb)
+            {
+                throw new ArgumentNullException("IRootCommandBuilder is null.  Check IoC");
+            }
 
-            Console.WriteLine("cmd.GetType='{0}'", cmd.GetType().Name);
-
-            /* Note, I tried .Invoke and the below, both have the same result */
-            int returnValue = await cmd.InvokeAsync(args);
+            RootCommand rc = ircb.CreateRootCommand("my_first_root_command");
+            int returnValue = await rc.InvokeAsync(args);
             Console.WriteLine(string.Format("RootCommand.InvokeAsync='{0}'", returnValue));
-
-            return returnValue;
-        }
-
-        private static async Task<int> RunParserDemo(IServiceProvider servProv, string[] args)
-        {
-            Console.WriteLine(string.Concat(Enumerable.Repeat(System.Environment.NewLine, 10)));
-
-            IRootParserBuilder rootParserBuilder = servProv.GetService<IRootParserBuilder>();
-            Parser prsr = rootParserBuilder.CreateParser();
-            int returnValue = await prsr.InvokeAsync(args);
-            Console.WriteLine(string.Format("Parser.InvokeAsync='{0}'", returnValue));
 
             return returnValue;
         }
@@ -131,7 +125,8 @@ namespace MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne
             });
 
             servColl.AddSingleton<ICommandCreator, MyTypeCommandCreator>();
-            servColl.AddSingleton<IRootParserBuilder, RootParserBuilder>();
+            servColl.AddSingleton<ICommandCreator, ShowDateTimeCommandCreator>();
+            servColl.AddSingleton<IRootCommandBuilder, RootCommandBuilder>();
 
             ServiceProvider servProv = servColl.BuildServiceProvider();
 

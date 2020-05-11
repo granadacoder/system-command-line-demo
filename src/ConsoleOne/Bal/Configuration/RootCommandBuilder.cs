@@ -3,49 +3,45 @@
     using System;
     using System.Collections.Generic;
     using System.CommandLine;
-    using System.CommandLine.Builder;
-    using System.CommandLine.Parsing;
+
     using Microsoft.Extensions.Logging;
+
     using MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.Bal.Configuration.Interfaces;
 
-    public class RootParserBuilder : IRootParserBuilder
+    public class RootCommandBuilder : IRootCommandBuilder
     {
         public const string ErrorMessageILoggerFactoryIsNull = "ILoggerFactory is null";
         public const string ErrorMessageICommandCreatorIsNull = "ICommandCreator is null";
 
         public const string LogMessageAddingICommandCreator = "Adding ICommandCreator. (Command Description=\"{0}\")";
 
-        private readonly ILogger<RootParserBuilder> logger;
+        private readonly ILogger<RootCommandBuilder> logger;
         private readonly IEnumerable<ICommandCreator> commandCreators;
 
-        public RootParserBuilder(ILoggerFactory loggerFactory, IEnumerable<ICommandCreator> commandCreators)
+        public RootCommandBuilder(ILoggerFactory loggerFactory, IEnumerable<ICommandCreator> commandCreators)
         {
             if (null == loggerFactory)
             {
                 throw new ArgumentNullException(ErrorMessageILoggerFactoryIsNull, (Exception)null);
             }
 
-            this.logger = loggerFactory.CreateLogger<RootParserBuilder>();
+            this.logger = loggerFactory.CreateLogger<RootCommandBuilder>();
 
             this.commandCreators = commandCreators ?? throw new ArgumentNullException(ErrorMessageICommandCreatorIsNull, (Exception)null);
         }
 
-        public Parser CreateParser()
+        public RootCommand CreateRootCommand(string description)
         {
-            CommandLineBuilder clb = new CommandLineBuilder();
+            RootCommand returnItem = new RootCommand(description);
 
             foreach (ICommandCreator icc in this.commandCreators)
             {
-                RootCommand cmd = icc.CreateRootCommand();
-                this.logger.LogInformation(string.Format(LogMessageAddingICommandCreator, cmd.Description));
-                clb.AddCommand(cmd);
+                Command cmd = icc.CreateCommand();
+                this.logger.LogInformation(string.Format(LogMessageAddingICommandCreator, returnItem.Description, cmd.Description));
+                returnItem.AddCommand(cmd);
             }
 
-            Parser prsr = clb
-                .UseDefaults()
-                .Build();
-
-            return prsr;
+            return returnItem;
         }
     }
 }
