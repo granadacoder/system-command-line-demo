@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne": {
+      "commandName": "Project",
+      "commandLineArgs": "showdatetime --includedate false --dateformat \"MM/dd/yyyy\" --includetime",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
