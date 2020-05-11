@@ -34,7 +34,7 @@ namespace MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne
              MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.exe mytypeone -a valuea -b valueb -c valuec -d valued -e valuee -f valuef -g valueg -h valueh -i valuei
              
             example two
-            MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.exe mytypeone showdatetime --includedate false --dateformat "MM/dd/yyyy" --includetime
+            MyCompany.MyExamples.SystemCommandLineOne.ConsoleOne.exe showdatetime --includedate false --dateformat "MM/dd/yyyy" --includetime
              */
 
             /* easy concrete logger that uses a file for demos */
